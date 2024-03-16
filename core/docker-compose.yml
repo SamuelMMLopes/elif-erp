@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  postgres:
+    image: bitnami/postgresql:latest
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=elif
+      - POSTGRES_PASSWORD=elif
+      - POSTGRES_DB=core
+    volumes:
+      - elif_core_data:/bitnami/postgresql
+volumes:
+  elif_core_data:

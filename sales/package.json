@@ -1,0 +1,39 @@
+{
+  "name": "@elif/sales",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "bun --watch src/main/index.ts",
+    "generate": "drizzle-kit generate:pg",
+    "migrate": "bun src/infra/database/migrate.ts",
+    "studio": "drizzle-kit studio"
+  },
+  "devDependencies": {
+    "@types/amqplib": "^0.10.5",
+    "@types/bun": "latest",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@typescript-eslint/eslint-plugin": "^7.1.1",
+    "@typescript-eslint/parser": "^7.1.1",
+    "drizzle-kit": "^0.20.14",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-simple-import-sort": "^12.0.0",
+    "pg": "^8.11.3",
+    "prettier": "^3.2.5",
+    "typescript": "^5.4.2"
+  },
+  "dependencies": {
+    "amqplib": "^0.10.3",
+    "drizzle-orm": "^0.30.1",
+    "hono": "^4.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "postgres": "^3.4.3",
+    "ulid": "^2.3.0",
+    "zod": "^3.22.4"
+  }
+}
