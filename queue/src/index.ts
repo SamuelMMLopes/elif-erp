@@ -1,21 +1,16 @@
-import { readdir } from 'node:fs/promises'
-import { join } from 'node:path'
-
 import amqp from 'amqplib'
 
+import { assertBinds } from './assert-binds'
+import { assertExchanges } from './assert-exchanges'
+import { assertQueues } from './assert-queues'
 import { env } from './env'
 
 const connection = await amqp.connect(env.QUEUE_URL)
 const channel = await connection.createChannel()
 
-const files = await readdir(join(__dirname, './services'))
-await Promise.all(
-  files
-    .filter((file) => !file.endsWith('.map'))
-    .map(async (file) => {
-      await (await import(`./services/${file}`)).default(channel)
-    }),
-)
+await Promise.all([assertExchanges(channel), assertQueues(channel)])
+
+await assertBinds(channel)
 
 await connection.close()
 
