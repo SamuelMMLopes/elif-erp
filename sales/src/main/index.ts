@@ -7,9 +7,10 @@ import { setupQueueConsumers } from '@/infra/queue'
 
 const app = new Hono()
 
-await setupQueueConsumers(makeRabbitMQAdapter())
+const rabbitmq = makeRabbitMQAdapter()
+await rabbitmq.connect()
 
-await setupHono(app)
+await Promise.all([setupHono(app), setupQueueConsumers(rabbitmq)])
 
 app.onError((error, context) => {
   console.error(error)

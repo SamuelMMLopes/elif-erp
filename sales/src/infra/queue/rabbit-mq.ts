@@ -6,9 +6,7 @@ export class RabbitMQAdapter implements Queue {
   private static instance: Queue | undefined
   private connection: amqp.Connection | undefined
 
-  private constructor(private readonly url: string) {
-    this.connect()
-  }
+  private constructor(private readonly url: string) {}
 
   static getInstance(url: string): Queue {
     if (!this.instance) {

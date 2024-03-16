@@ -12,6 +12,8 @@ export class OnOrganizationCreatedSubscriber implements EventHandler {
       event: 'organization-created',
       data: {
         id: organization.id,
+        name: organization.name,
+        email: organization.email,
       },
     })
   }
