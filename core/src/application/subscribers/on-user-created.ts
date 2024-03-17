@@ -10,7 +10,7 @@ export class OnUserCreatedSubscriber implements EventHandler {
   private publishInQueue({ user }: UserCreatedEvent): void {
     this.queue.publish({
       event: 'user-created',
-      data: { id: user.id },
+      data: { id: user.id, name: user.name },
     })
   }
 

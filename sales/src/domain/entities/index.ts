@@ -1,3 +1,3 @@
 export * from './customer'
 export * from './document'
-export * from './name'
+export * from './seller'

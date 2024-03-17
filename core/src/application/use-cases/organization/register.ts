@@ -1,5 +1,5 @@
 import type { OrganizationRepository } from '@/application/contracts/repositories'
-import { Organization } from '@/domain/entities'
+import { Organization, type OrganizationType } from '@/domain/entities'
 import { type Either, left, right } from '@/shared/core'
 import { CustomError } from '@/shared/errors'
 import { DomainEvents } from '@/shared/events'
@@ -7,6 +7,7 @@ import { DomainEvents } from '@/shared/events'
 type Input = {
   name: string
   email: string
+  type: OrganizationType
   document: string
 }
 
@@ -17,8 +18,13 @@ export class RegisterOrganizationUseCase {
     private readonly organizationRepository: OrganizationRepository,
   ) {}
 
-  async execute({ name, email, document }: Input): Promise<Output> {
-    const organizationOrErrors = Organization.create({ name, email, document })
+  async execute({ name, email, type, document }: Input): Promise<Output> {
+    const organizationOrErrors = Organization.create({
+      name,
+      email,
+      type,
+      document,
+    })
     if (organizationOrErrors.isLeft()) {
       return left(organizationOrErrors.value)
     }

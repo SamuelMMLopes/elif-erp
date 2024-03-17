@@ -4,6 +4,7 @@ import { CustomError } from '@/shared/errors'
 
 type Input = {
   id: string
+  name: string
 }
 
 type Output = Either<CustomError, undefined>
@@ -11,12 +12,12 @@ type Output = Either<CustomError, undefined>
 export class RegisterUserUseCase {
   constructor(private readonly userDao: UserDao) {}
 
-  async execute({ id }: Input): Promise<Output> {
+  async execute({ id, name }: Input): Promise<Output> {
     const userWithSameId = await this.userDao.findById(id)
     if (userWithSameId) {
       return left(new CustomError('User already exists'))
     }
-    await this.userDao.create({ id })
+    await this.userDao.create({ id, name })
     return right(undefined)
   }
 }

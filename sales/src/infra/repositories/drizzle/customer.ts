@@ -25,4 +25,16 @@ export class DrizzleCustomerRepository implements CustomerRepository {
     }
     return Customer.restore(rawCustomer)
   }
+
+  async findById(id: string = ''): Promise<Customer | null> {
+    const rawCustomer = await db.query.customers.findFirst({
+      where(fields, { eq }) {
+        return eq(fields.id, id)
+      },
+    })
+    if (!rawCustomer) {
+      return null
+    }
+    return Customer.restore(rawCustomer)
+  }
 }

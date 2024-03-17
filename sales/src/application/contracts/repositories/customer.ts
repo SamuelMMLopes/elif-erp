@@ -11,5 +11,6 @@ export interface CustomerRepository {
   findByDocument: (
     input: CustomerRepository.FindByDocumentInput,
   ) => Promise<Customer | null>
+  findById: (id: string) => Promise<Customer | null>
   create: (customer: Customer) => Promise<void>
 }

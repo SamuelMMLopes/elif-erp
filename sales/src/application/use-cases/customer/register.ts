@@ -2,7 +2,7 @@ import type { OrganizationDao } from '@/application/contracts/daos'
 import type { CustomerRepository } from '@/application/contracts/repositories'
 import { Customer, type CustomerType } from '@/domain/entities'
 import { type Either, left, right } from '@/shared/core'
-import { CustomError } from '@/shared/errors'
+import { CustomError, ResourceNotFoundError } from '@/shared/errors'
 import { DomainEvents } from '@/shared/events'
 
 type Input = {
@@ -28,7 +28,7 @@ export class RegisterCustomerUseCase {
   }: Input): Promise<Output> {
     const organization = await this.organizationDao.findById(organizationId)
     if (!organization) {
-      return left([new CustomError('Organization not found')])
+      return left([new ResourceNotFoundError('organization')])
     }
     const customerWithSameDocument =
       await this.customerRepository.findByDocument({ document, organizationId })

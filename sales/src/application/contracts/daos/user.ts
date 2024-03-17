@@ -1,6 +1,7 @@
 export namespace UserDao {
   export type User = {
     id: string
+    name: string
   }
 }
 

@@ -1,6 +1,7 @@
 export namespace OrganizationDao {
   export type Organization = {
     id: string
+    name: string
   }
 }
 

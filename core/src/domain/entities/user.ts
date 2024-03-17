@@ -1,30 +1,24 @@
 import { ulid } from 'ulid'
+import { z } from 'zod'
 
 import { UserCreatedEvent } from '@/domain/events'
 import { type Either, Entity, left, right } from '@/shared/core'
-import { InvalidFieldError } from '@/shared/errors'
+import { InvalidFieldError, parseZodErrors } from '@/shared/errors'
 
-import { Email } from './email'
-import { Name } from './name'
 import { Username } from './username'
 
-type CreateInput = {
-  name: string
-  email: string
-  username: string
-  organizationId: string
-  isOrganizationOwner: boolean
-  organizationSlug: string
-}
+const createSchema = z.object({
+  name: z.string().min(2),
+  email: z.string().min(1).email(),
+  username: z.string(),
+  organizationId: z.string().min(1),
+  isOrganizationOwner: z.boolean(),
+  organizationSlug: z.string().min(1),
+})
 
-type RestoreInput = {
-  id: string
-  name: string
-  email: string
-  username: string
-  organizationId: string
-  isOrganizationOwner: boolean
-}
+type CreateInput = z.infer<typeof createSchema>
+
+type RestoreInput = { id: string } & Omit<CreateInput, 'organizationSlug'>
 
 export class User extends Entity {
   constructor(
@@ -51,11 +45,16 @@ export class User extends Entity {
     organizationSlug,
   }: CreateInput): Either<InvalidFieldError[], User> {
     const errors: InvalidFieldError[] = []
-    if (!Name.isValid(name)) {
-      errors.push(new InvalidFieldError('name'))
-    }
-    if (!Email.isValid(email)) {
-      errors.push(new InvalidFieldError('email'))
+    const userValidationOutput = createSchema.safeParse({
+      name,
+      email,
+      username,
+      organizationId,
+      isOrganizationOwner,
+      organizationSlug,
+    })
+    if (!userValidationOutput.success) {
+      errors.concat(parseZodErrors(userValidationOutput.error))
     }
     const usernameOrError = Username.create({ username, organizationSlug })
     if (usernameOrError.isLeft()) {
@@ -68,7 +67,7 @@ export class User extends Entity {
     const user = new User(
       userId,
       name,
-      Email.format(email),
+      email,
       (usernameOrError.value as Username).value,
       organizationId,
       isOrganizationOwner,
