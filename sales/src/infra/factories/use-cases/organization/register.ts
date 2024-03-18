@@ -1,7 +1,7 @@
 import { RegisterOrganizationUseCase } from '@/application/use-cases/organization'
-import { makeDrizzleOrganizationDao } from '@/infra/factories/daos/drizzle'
+import { makeDrizzleOrganizationRepository } from '@/infra/factories/repositories/drizzle'
 
 export const makeRegisterOrganizationUseCase =
   (): RegisterOrganizationUseCase => {
-    return new RegisterOrganizationUseCase(makeDrizzleOrganizationDao())
+    return new RegisterOrganizationUseCase(makeDrizzleOrganizationRepository())
   }

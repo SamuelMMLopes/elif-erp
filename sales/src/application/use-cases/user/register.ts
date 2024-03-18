@@ -1,4 +1,4 @@
-import type { UserDao } from '@/application/contracts/daos'
+import type { UserRepository } from '@/application/contracts/repositories'
 import { type Either, left, right } from '@/shared/core'
 import { CustomError } from '@/shared/errors'
 
@@ -10,14 +10,14 @@ type Input = {
 type Output = Either<CustomError, undefined>
 
 export class RegisterUserUseCase {
-  constructor(private readonly userDao: UserDao) {}
+  constructor(private readonly userRepUserRepository: UserRepository) {}
 
   async execute({ id, name }: Input): Promise<Output> {
-    const userWithSameId = await this.userDao.findById(id)
+    const userWithSameId = await this.userRepUserRepository.findById(id)
     if (userWithSameId) {
       return left(new CustomError('User already exists'))
     }
-    await this.userDao.create({ id, name })
+    await this.userRepUserRepository.create({ id, name })
     return right(undefined)
   }
 }
